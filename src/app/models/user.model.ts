@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IUser } from "../interfaces/user.interface";
-
+import validator from "validator";
 
 const userSchema = new Schema<IUser>({
     firstName: {
@@ -16,8 +16,19 @@ const userSchema = new Schema<IUser>({
     },
     email: {
         type: String,
+        unique: [true, "Email common porce"],
         required: true,
-        trim: true
+        lowercase: true,
+        trim: true,
+        // validate: {
+        //     validator: function (value) {
+        //         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+        //     },
+        //     message: function (props) {
+        //         return `Email ${props.value} is not valid email`
+        //     }
+        // }
+        validate: [validator.isEmail, "Invalid Email sent {VALUE}"]
     },
     password: {
         type: String,
